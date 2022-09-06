@@ -9,13 +9,13 @@ namespace Ejercicio_1._2_Facturacion
     internal class FormaPago
     {
         
-        public string TipoFP { get; set; }
+        public int TipoFP { get; set; }
 
         public FormaPago()
         {
-            this.TipoFP = string.Empty;
+            this.TipoFP = 0;
         }
-        public FormaPago(string nombre)
+        public FormaPago(int nombre)
         {
             TipoFP = nombre;
         }

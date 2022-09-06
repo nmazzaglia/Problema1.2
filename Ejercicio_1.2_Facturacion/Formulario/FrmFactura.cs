@@ -34,7 +34,7 @@ namespace Ejercicio_1._2_Facturacion
 
         private void ProximaFactura()
         {
-            int nuevaFactura;
+            int nuevaFactura;   
             nuevaFactura = oHelper.ProximaFactura("SP_NUEVA_FACTURA");
             if (nuevaFactura > 0)
             {
@@ -68,8 +68,8 @@ namespace Ejercicio_1._2_Facturacion
 
             if (dgvDetalle.CurrentCell.ColumnIndex == 4)
             {
-                nuevaFactura.QuitarDetalle(dgvDetalle.CurrentRow.Index);
-                dgvDetalle.Rows.Remove(dgvDetalle.CurrentRow);
+                nuevaFactura.QuitarDetalle(dgvDetalle.CurrentRow.Index); // Eliminamos el detalle de la ListaDetalle
+                dgvDetalle.Rows.Remove(dgvDetalle.CurrentRow); // Eliminamos el detalle del dgvDetalles
                 nuevaFactura.CalcularTotal();
             }
         }
@@ -78,16 +78,17 @@ namespace Ejercicio_1._2_Facturacion
         {
             if (ValidarDetalle())
             {
-                ////VALIDAR QUE SE INGRESE UN ARTICULO NUEVO Y NO UNO YA EXISTENTE
-                //foreach (DataGridViewRow fila in dgvDetalle.Rows)
-                //{
-                //    if (fila.Cells["colArticulo"].Value.ToString().Equals(cboArticulo.Text))
-                //    {
-                //        MessageBox.Show($"Articulo {cboArticulo.Text} ya agregado", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                //        return;
-                //    }
+                //VALIDAR QUE SE INGRESE UN ARTICULO NUEVO Y NO UNO YA EXISTENTE
+                foreach (DataGridViewRow fila in dgvDetalle.Rows)
+                {
+                  
+                    if (fila.Cells["colArticulo"].Value.ToString().Equals(cboArticulo.Text))
+                    {
+                        MessageBox.Show($"Articulo {cboArticulo.Text} ya agregado", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        return;
+                    }
 
-                //}
+                }
 
 
                 DataRowView item = (DataRowView)cboArticulo.SelectedItem;
@@ -100,8 +101,10 @@ namespace Ejercicio_1._2_Facturacion
                 int cantidad = Convert.ToInt32(txtCantidad.Text);
                 DetalleFactura detalle = new DetalleFactura(oArticulo, cantidad);
 
-                nuevaFactura.AgregarDetalle(detalle);
-                dgvDetalle.Rows.Add(new object[] { item.Row.ItemArray[0], item.Row.ItemArray[1], item.Row.ItemArray[2],txtCantidad.Text});
+
+
+                nuevaFactura.AgregarDetalle(detalle); // El método AgregarDetalle es para ir conformando los detalles que luego se va a grabar en la DB
+                dgvDetalle.Rows.Add(new object[] { item.Row.ItemArray[0], item.Row.ItemArray[1], item.Row.ItemArray[2],txtCantidad.Text}); //Cargar el dgvDetalle
                 
 
 
@@ -140,7 +143,7 @@ namespace Ejercicio_1._2_Facturacion
             {
                 nuevaFactura.Cliente = txtCliente.Text;
                 nuevaFactura.Fecha = dtpFecha.Value;
-                nuevaFactura.FormaPago.TipoFP = cboFormaPago.Text;
+                nuevaFactura.FormaPago.TipoFP = Convert.ToInt32(cboFormaPago.SelectedValue);
 
                 if (oHelper.RegistrarFactura(nuevaFactura))
                 {
@@ -180,13 +183,28 @@ namespace Ejercicio_1._2_Facturacion
             }
 
 
-
             return valido;
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void txtCliente_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsLetter(e.KeyChar))
+            {
+                e.Handled = true;                
+            }
+        }
+
+        private void txtCantidad_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsNumber(e.KeyChar))
+            {
+                e.Handled = true;
+            }     
         }
     }
 }

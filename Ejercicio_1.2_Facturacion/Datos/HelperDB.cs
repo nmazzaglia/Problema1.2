@@ -65,7 +65,7 @@ namespace Ejercicio_1._2_Facturacion
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@CLIENTE", nuevaFactura.Cliente);
                 cmd.Parameters.AddWithValue("@FORMA_PAGO", nuevaFactura.FormaPago.TipoFP);
-
+                
                 SqlParameter nroFacturaOut = new SqlParameter();
                 nroFacturaOut.ParameterName = "@NRO_FACTURA";
                 nroFacturaOut.DbType = DbType.Int32;
@@ -79,17 +79,17 @@ namespace Ejercicio_1._2_Facturacion
                 // INSERT DETALLE //
 
                 SqlCommand cmd_detalle;
-                
 
+                
                 foreach (DetalleFactura fila in nuevaFactura.ListDetalles)
                 {
-                    cmd_detalle = new SqlCommand("SP_INSERTAR_DETALLE", cnn,t);
-                    cmd_detalle.Parameters.AddWithValue("@NRO_FACTURA", nroFactura);
+                    cmd_detalle = new SqlCommand("SP_INSERTAR_DETALLE_FACTURA", cnn,t);
+                    cmd_detalle.CommandType = CommandType.StoredProcedure;
+                    cmd_detalle.Parameters.AddWithValue("@NRO_FACTURAS", nroFactura);
                     cmd_detalle.Parameters.AddWithValue("@ID_ARTICULO", fila.Articulo.IdArt);
                     cmd_detalle.Parameters.AddWithValue("@CANTIDAD", fila.Cantidad);
-
-                    cmd_detalle.ExecuteNonQuery();
-                    
+                   
+                    cmd_detalle.ExecuteNonQuery();     
                 }             
                 t.Commit(); // Consolidar/confirmar
             }
@@ -99,7 +99,7 @@ namespace Ejercicio_1._2_Facturacion
                 {
                     t.Rollback();
                     ok = false;
-                }               
+                }
             }
             finally
             {
@@ -107,7 +107,7 @@ namespace Ejercicio_1._2_Facturacion
                 {
                     cnn.Close();
                 }
-                
+
             }
 
             return ok;

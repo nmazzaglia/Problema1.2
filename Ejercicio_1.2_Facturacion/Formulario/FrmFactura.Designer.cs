@@ -41,6 +41,11 @@
             this.lblCantidad = new System.Windows.Forms.Label();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.dgvDetalle = new System.Windows.Forms.DataGridView();
+            this.colIdArticulo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colArticulo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPrecio = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAcciones = new System.Windows.Forms.DataGridViewButtonColumn();
             this.txtSubtotal = new System.Windows.Forms.TextBox();
             this.lblSubtotal = new System.Windows.Forms.Label();
             this.txtTotal = new System.Windows.Forms.TextBox();
@@ -48,11 +53,6 @@
             this.btnCancelar = new System.Windows.Forms.Button();
             this.btnAceptar = new System.Windows.Forms.Button();
             this.btnSalir = new System.Windows.Forms.Button();
-            this.colIdArticulo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colArticulo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPrecio = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colCantidad = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colAcciones = new System.Windows.Forms.DataGridViewButtonColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalle)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,6 +113,7 @@
             this.txtCliente.Name = "txtCliente";
             this.txtCliente.Size = new System.Drawing.Size(208, 20);
             this.txtCliente.TabIndex = 6;
+            this.txtCliente.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCliente_KeyPress);
             // 
             // cboArticulo
             // 
@@ -137,6 +138,7 @@
             this.txtCantidad.Name = "txtCantidad";
             this.txtCantidad.Size = new System.Drawing.Size(83, 20);
             this.txtCantidad.TabIndex = 10;
+            this.txtCantidad.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCantidad_KeyPress);
             // 
             // lblCantidad
             // 
@@ -159,6 +161,8 @@
             // 
             // dgvDetalle
             // 
+            this.dgvDetalle.AllowUserToAddRows = false;
+            this.dgvDetalle.AllowUserToDeleteRows = false;
             this.dgvDetalle.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDetalle.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colIdArticulo,
@@ -168,9 +172,45 @@
             this.colAcciones});
             this.dgvDetalle.Location = new System.Drawing.Point(15, 179);
             this.dgvDetalle.Name = "dgvDetalle";
+            this.dgvDetalle.ReadOnly = true;
             this.dgvDetalle.Size = new System.Drawing.Size(441, 156);
             this.dgvDetalle.TabIndex = 12;
             this.dgvDetalle.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // colIdArticulo
+            // 
+            this.colIdArticulo.HeaderText = "ID ARTICULO";
+            this.colIdArticulo.Name = "colIdArticulo";
+            this.colIdArticulo.ReadOnly = true;
+            this.colIdArticulo.Visible = false;
+            // 
+            // colArticulo
+            // 
+            this.colArticulo.HeaderText = "ARTICULO";
+            this.colArticulo.Name = "colArticulo";
+            this.colArticulo.ReadOnly = true;
+            // 
+            // colPrecio
+            // 
+            this.colPrecio.HeaderText = "PRECIO";
+            this.colPrecio.Name = "colPrecio";
+            this.colPrecio.ReadOnly = true;
+            // 
+            // colCantidad
+            // 
+            this.colCantidad.HeaderText = "CANTIDAD";
+            this.colCantidad.Name = "colCantidad";
+            this.colCantidad.ReadOnly = true;
+            // 
+            // colAcciones
+            // 
+            this.colAcciones.HeaderText = "ACCION";
+            this.colAcciones.Name = "colAcciones";
+            this.colAcciones.ReadOnly = true;
+            this.colAcciones.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colAcciones.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.colAcciones.Text = "Quitar";
+            this.colAcciones.UseColumnTextForButtonValue = true;
             // 
             // txtSubtotal
             // 
@@ -233,36 +273,6 @@
             this.btnSalir.Text = "Salir ";
             this.btnSalir.UseVisualStyleBackColor = true;
             this.btnSalir.Click += new System.EventHandler(this.btnSalir_Click);
-            // 
-            // colIdArticulo
-            // 
-            this.colIdArticulo.HeaderText = "ID ARTICULO";
-            this.colIdArticulo.Name = "colIdArticulo";
-            this.colIdArticulo.Visible = false;
-            // 
-            // colArticulo
-            // 
-            this.colArticulo.HeaderText = "ARTICULO";
-            this.colArticulo.Name = "colArticulo";
-            // 
-            // colPrecio
-            // 
-            this.colPrecio.HeaderText = "PRECIO";
-            this.colPrecio.Name = "colPrecio";
-            // 
-            // colCantidad
-            // 
-            this.colCantidad.HeaderText = "CANTIDAD";
-            this.colCantidad.Name = "colCantidad";
-            // 
-            // colAcciones
-            // 
-            this.colAcciones.HeaderText = "ACCION";
-            this.colAcciones.Name = "colAcciones";
-            this.colAcciones.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.colAcciones.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.colAcciones.Text = "Quitar";
-            this.colAcciones.UseColumnTextForButtonValue = true;
             // 
             // FrmFactura
             // 

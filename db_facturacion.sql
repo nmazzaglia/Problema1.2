@@ -30,7 +30,7 @@ FECHA DATETIME,
 ID_FORMAPAGO INT,
 CLIENTE VARCHAR (50)
 
-CONSTRAINT PK_FACTURA PRIMARY KEY (NRO_FACTURA)
+CONSTRAINT PK_FACTURA PRIMARY KEY (NRO_FACTURA),
 CONSTRAINT FK_FACTURA_FORMAS_PAGO FOREIGN KEY (ID_FORMAPAGO)
 REFERENCES FORMAS_PAGO (ID_FORMAPAGO)
 )
@@ -63,34 +63,19 @@ values (5,'Mercado Pago')
 insert into ARTICULOS (descripcion, pre_unitario)
 values ('Arroz',150)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('Fideos',150)
+values ('Fideos',200)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('Lentejas',150)
+values ('Lentejas',180)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('YerbaMate',150)
+values ('YerbaMate',100)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('Vino',150)
+values ('Vino',50)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('Fernet',150)
+values ('Fernet',500)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('Sal',150)
+values ('Sal',175)
 insert into ARTICULOS (descripcion, pre_unitario)
-values ('Aceite',150)
-
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(1,3)
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(2,4)
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(3,5)
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(4,5)
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(5,10)
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(6,8)
-insert into DETALLES_FACTURA(id_articulo,cantidad)
-values(8,1)
+values ('Aceite',90)
 
 insert into FACTURAS(fecha,id_formaPago,cliente)
 values ('5/6/2021',1,'Toledo Bruno')
@@ -102,6 +87,22 @@ insert into FACTURAS(fecha,id_formaPago,cliente)
 values ('2/1/2020',2,'Catalina Pissoni')
 insert into FACTURAS(fecha,id_formaPago,cliente)
 values ('5/6/2019',1,'Agustina Gallardo')
+
+insert into DETALLES_FACTURA(NRO_FACTURA,ID_ARTICULO,cantidad)
+values(1,1,3)
+insert into DETALLES_FACTURA(NRO_FACTURA,id_articulo,cantidad)
+values(1,2,4)
+insert into DETALLES_FACTURA(NRO_FACTURA,id_articulo,cantidad)
+values(2,3,5)
+insert into DETALLES_FACTURA(NRO_FACTURA,id_articulo,cantidad)
+values(3,4,5)
+insert into DETALLES_FACTURA(NRO_FACTURA,id_articulo,cantidad)
+values(4,5,10)
+insert into DETALLES_FACTURA(NRO_FACTURA,id_articulo,cantidad)
+values(4,6,8)
+insert into DETALLES_FACTURA(NRO_FACTURA,id_articulo,cantidad)
+values(5,8,1)
+
 
 GO
 CREATE PROCEDURE SP_PRODUCTO
@@ -138,6 +139,7 @@ JOIN ARTICULOS A ON A.ID_ARTICULO = DF.ID_ARTICULO
 JOIN FORMAS_PAGO FP ON FP.ID_FORMAPAGO = F.ID_FORMAPAGO
 END
 
+GO
 CREATE PROCEDURE SP_INSERTAR_MAESTRO
 @NRO_FACTURA INT OUTPUT,
 @CLIENTE VARCHAR (50),
@@ -145,19 +147,24 @@ CREATE PROCEDURE SP_INSERTAR_MAESTRO
 AS
 BEGIN
 INSERT INTO FACTURAS (FECHA, ID_FORMAPAGO, CLIENTE	) VALUES(GETDATE(),@FORMA_PAGO,@CLIENTE)
-SET @NRO_FACTURA = SCOPE_IDENTITY()
+SET @NRO_FACTURA = SCOPE_IDENTITY()  -- PERMITE RECUPERAR EL ULTIMO VALOR DEL PK
 END
 
-CREATE PROC SP_INSERTAR_DETALLE
-@NRO_FACTURA INT,
+GO
+CREATE PROC SP_INSERTAR_DETALLE_FACTURA
+@NRO_FACTURAS INT,
 @ID_ARTICULO INT,
 @CANTIDAD INT
 AS
 BEGIN
-INSERT INTO DETALLES_FACTURA (NRO_FACTURA, ID_ARTICULO, CANTIDAD) VALUES(@NRO_FACTURA, @ID_ARTICULO, @CANTIDAD)
+INSERT INTO DETALLES_FACTURA (NRO_FACTURA, ID_ARTICULO, CANTIDAD) VALUES(@NRO_FACTURAS, @ID_ARTICULO, @CANTIDAD)
 END
 
 
 
 SELECT *
-FROM	FACTURAS
+FROM FACTURAS
+
+SELECT *
+FROM DETALLES_FACTURA
+
